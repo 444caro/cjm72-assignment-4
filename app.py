@@ -12,8 +12,30 @@ nltk.download('stopwords')
 app = Flask(__name__)
 
 
-# TODO: Fetch dataset, initialize vectorizer and LSA here
+# fetch dataset 
+newsgroups = fetch_20newsgroups(subset='all')
+documents = newsgroups.data
 
+# initialize vectorizer and LSA
+stop_words = set(stopwords.words('english'))
+vectorizer = TfidfVectorizer(stop_words=stop_words, max_features=5000)
+X = vectorizer.fit_transform(documents)
+
+# perform LSA using TruncatedSVD
+n_components = 100
+svd_model = TruncatedSVD(n_components=n_components, random_state=42)
+X_reduced = svd_model.fit_transform(X)
+
+# function to process the query
+def process_query(query):
+    """
+    Function to process the query
+    Input: query (str)
+    Output: query_vector (numpy array)
+    """
+    query_vector = vectorizer.transform([query])
+    query_vector_reduced = svd_model.transform(query_vector)
+    return query_vector_reduced
 
 def search_engine(query):
     """
@@ -21,8 +43,13 @@ def search_engine(query):
     Input: query (str)
     Output: documents (list), similarities (list), indices (list)
     """
-    # TODO: Implement search engine here
-    # return documents, similarities, indices 
+    query_reduced = process_query(query)
+    similarities = cosine_similarity(query_reduced, X_reduced)[0]
+    # get the top 5 indices based on similarity scores
+    top_indices = np.argsort(similarities)[-5:][::-1]
+    top_similarities = similarities[top_indices]
+    top_documents = [documents[i] for i in top_indices]
+    return top_documents, top_similarities.tolist(), top_indices.tolist()
 
 @app.route('/')
 def index():
