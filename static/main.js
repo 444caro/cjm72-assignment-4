@@ -37,6 +37,33 @@ function displayChart(data) {
     //        - documents (list) - list of documents
     //        - indices (list) - list of indices   
     //        - similarities (list) - list of similarities
-    // TODO: Implement function to display chart here
-    //       There is a canvas element in the HTML file with the id 'similarity-chart'
+    const ctx = document.getElementById('similarity-chart').getContext('2d');
+    const chartData = {
+        labels: data.indices.map((index) => `Doc ${index}`),
+        datasets:[{
+            label: 'Cosine Similarity',
+            data: data.similarities,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+    new chartData(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1
+                }
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }
+    });
 }
