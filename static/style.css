@@ -64,3 +64,13 @@ button:hover {
 #results div p {
     margin: 5px 0;
 }
+
+#similarity-chart {
+    width: 80%;
+    height: 400px;
+    margin: 20px auto; /* Center the chart */
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
