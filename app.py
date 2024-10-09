@@ -17,7 +17,7 @@ newsgroups = fetch_20newsgroups(subset='all')
 documents = newsgroups.data
 
 # initialize vectorizer and LSA
-stop_words = set(stopwords.words('english'))
+stop_words = list(stopwords.words('english'))
 vectorizer = TfidfVectorizer(stop_words=stop_words, max_features=5000)
 X = vectorizer.fit_transform(documents)
 
