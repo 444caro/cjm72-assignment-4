@@ -48,7 +48,7 @@ function displayChart(data) {
             borderWidth: 1
         }]
     };
-    new chartData(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: chartData,
         options: {
